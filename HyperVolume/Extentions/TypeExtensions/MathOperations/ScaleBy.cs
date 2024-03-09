@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PST.Extensions.MathOperations;
+using PST.HyperVolume.Extentions.TypeExtensions.MathOperations;
 
-namespace PST.HyperVolume.Extentions
+namespace PST.HyperVolume.Extensions.MathOperations
 {
     static public partial class MathExtensions {
 

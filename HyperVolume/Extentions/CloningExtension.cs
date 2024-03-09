@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PST.HyperVolume.Extentions {
+﻿namespace PST.HyperVolume.Extentions {
 	static public class CloningExtension {
 		static public IHyperVolume<T> Clone<T>(this IHyperVolume<T> instance, ThreadingOptions? threadingOptions = null) {
 			if (instance is null)
@@ -28,6 +22,7 @@ namespace PST.HyperVolume.Extentions {
 				if (tIsValueType)
 					volume[index] = thisValue;
 				else
+					// TODO: Finish PST.Instantiation.DeepCopy
 					throw new NotImplementedException("Cloning of non-value types is not yet implemented");
 
 			}, null, threadingOptions);

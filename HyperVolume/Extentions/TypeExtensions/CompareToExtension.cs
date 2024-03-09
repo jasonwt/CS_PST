@@ -1,7 +1,9 @@
 ﻿using System;
 
-namespace PST.Extensions {
-    static public class CompareToExtension {
+namespace PST.HyperVolume.Extentions.TypeExtensions
+{
+    static public class CompareToExtension
+    {
         static public int CompareTo<T, U>(this T a, U b) where T : IComparable<U>
             => a.CompareTo(b);
 
