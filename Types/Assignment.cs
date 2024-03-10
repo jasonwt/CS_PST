@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace PST.Types {
+	static public class Assignment {
+		public delegate void AssignmentDelegate(object from, ref object to);
 
-namespace PST.Assignments {
-	static public partial class Assign {
-		public delegate void AssignmentDelegate (object from, ref object to);
-
-		static public bool To(object from, ref object to) {
+		static public bool AssignTo(object from, ref object to) {
 			if (from is null || to is null)
 				throw new ArgumentNullException(from is null ? nameof(from) : nameof(to));
 
@@ -61,8 +55,8 @@ namespace PST.Assignments {
 
 			return false;
 		}
-		
-		static public AssignmentDelegate? Method(Type fromType, Type toType) {
+
+		static public AssignmentDelegate? AssignToMethod(Type fromType, Type toType) {
 			if (typeof(IAssignFrom).IsAssignableFrom(toType)) {
 				return (object from, ref object to) => {
 					((IAssignFrom)to).AssignFrom(from);
@@ -110,6 +104,5 @@ namespace PST.Assignments {
 
 			throw new InvalidCastException();
 		}
-		
 	}
 }

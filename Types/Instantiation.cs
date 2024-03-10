@@ -1,9 +1,9 @@
-﻿using System.IO;
+﻿
 using System.Reflection;
 
-namespace PST.Instantiation {
-	public static class Instantiator {
-		public static Array? InstantiateArrayFromType(Type? elementsType, int[]? lengths) {
+namespace PST.Types {
+	public static class Instantiation {
+		public static Array? InstantiateArray(Type? elementsType, int[]? lengths) {
 			if (elementsType is null) {
 				if (lengths is not null)
 					throw new ArgumentNullException(nameof(elementsType), "Elements type is null, but lengths is not null.");
@@ -22,7 +22,7 @@ namespace PST.Instantiation {
 			return array;
 		}
 
-		public static Enum? InstantiateEnumFromType(Type? enumType, int? selectedValue = null) {
+		public static Enum? InstantiateEnum(Type? enumType, int? selectedValue = null) {
 			if (enumType is null)
 				return null;
 
@@ -45,7 +45,7 @@ namespace PST.Instantiation {
 			return (Enum)Enum.ToObject(enumType, selectedValue);
 		}
 
-		public static object? InstantiateClassFromType(Type? classType, object?[]? args = null) {
+		public static object? InstantiateClass(Type? classType, object?[]? args = null) {
 			if (classType is null)
 				return null;
 
@@ -77,7 +77,7 @@ namespace PST.Instantiation {
 							object?[] constructArgs = new object?[parameters.Length];
 
 							foreach (var param in parameters)
-								constructArgs[param.Position] = InstantiateFromType(param.ParameterType);
+								constructArgs[param.Position] = Instantiate(param.ParameterType);
 
 							newInstance = constructor.Invoke(constructArgs);
 						}
@@ -93,7 +93,7 @@ namespace PST.Instantiation {
 			throw new ArgumentException("Can not auto construct class.", nameof(classType));
 		}
 
-		public static object? InstantiateStructFromType(Type? structType, object?[]? args = null) {
+		public static object? InstantiateStruct(Type? structType, object?[]? args = null) {
 			if (structType is null)
 				return null;
 
@@ -108,7 +108,7 @@ namespace PST.Instantiation {
 			return newStruct;
 		}
 
-		public static object? InstantiateFromType(Type? type, params object?[]? args) {
+		public static object? Instantiate(Type? type, params object?[]? args) {
 			if (type is null)
 				return null;
 
@@ -125,7 +125,7 @@ namespace PST.Instantiation {
 					lengths[i] = Convert.ToInt32(args[i]);
 				}
 
-				return InstantiateArrayFromType(type.GetElementType(), lengths);
+				return InstantiateArray(type.GetElementType(), lengths);
 			}
 
 			if (type.IsEnum) {
@@ -134,14 +134,14 @@ namespace PST.Instantiation {
 
 				int? value = (int?)(args?[0] ?? null);
 
-				return InstantiateEnumFromType(type, value);
+				return InstantiateEnum(type, value);
 			}
 
 			if (type.IsClass) {
 				if (args is null || args.Length == 0)
-					return InstantiateClassFromType(type);
+					return InstantiateClass(type);
 
-				return InstantiateClassFromType(type, args);
+				return InstantiateClass(type, args);
 
 			}
 
@@ -149,7 +149,7 @@ namespace PST.Instantiation {
 				if (args is not null && args.Length > 0)
 					throw new ArgumentException("args must have at most zero elements.");
 
-				return InstantiateStructFromType(type);
+				return InstantiateStruct(type);
 			}
 
 			throw new ArgumentException("Type is not an array, enum, class, or struct.", nameof(type));

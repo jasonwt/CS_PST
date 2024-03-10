@@ -30,16 +30,12 @@ static public class Program {
 		testVolume.SetValues((double)1);
 		testVolume.SetValues((decimal)1);
 
-
-
 		Console.WriteLine(testVolume);
 
 		testVolume.Reshape(3);
 		Console.WriteLine("Reshaped Test Volume\n" + testVolume);
 
-		/*
-		  
-		 
+		/*		 
 			incides scale for 2x2 to 3x3 is 1.0 (newShape.Length / oldShape.Length)
 			elements scale for 2x2 to 3x3 is 0.5 (newShape[n].Length / oldShape[n].Length)
 		 

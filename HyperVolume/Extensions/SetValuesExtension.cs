@@ -1,5 +1,6 @@
-﻿using PST.Assignments;
+﻿using PST.Types;
 using PST.HyperVolume.Selection;
+
 
 namespace PST.HyperVolume.Extensions {
 	static public class SetValuesExtension {
@@ -29,7 +30,7 @@ namespace PST.HyperVolume.Extensions {
 
 			volume.Foreach(
 				(IHyperVolume<T> volume, int index) => {
-					Assign.To(value, ref assignmentValue);
+					Assignment.AssignTo(value, ref assignmentValue);
 					volume[index] = (T) assignmentValue;
 				},
 				selection,
@@ -63,7 +64,7 @@ namespace PST.HyperVolume.Extensions {
 
 			await volume.ForeachAsync(
 				(IHyperVolume<T> volume, int index) => {
-					Assign.To(value, ref assignmentValue);
+					Assignment.AssignTo(value, ref assignmentValue);
 					volume[index] = (T)assignmentValue;
 				},
 				selection,

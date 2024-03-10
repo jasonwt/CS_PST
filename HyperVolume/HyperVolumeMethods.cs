@@ -1,5 +1,5 @@
-﻿using System.Runtime.CompilerServices;
-using PST.Assignments;
+﻿using PST.Types;
+using System.Runtime.CompilerServices;
 
 namespace PST.HyperVolume {
 	public abstract partial class HyperVolume<T> {
@@ -95,15 +95,11 @@ namespace PST.HyperVolume {
 			if (newShape.Length == 0)
 				throw new ArgumentException("New shape must have at least one dimension", nameof(newShape));
 
-			var assignmentMethod = Assign.Method(typeof(float), typeof(T));
+			var assignmentMethod = Assignment.AssignToMethod(typeof(float), typeof(T));
 
 			if (assignmentMethod is null)
 				throw new InvalidOperationException("No assignment method found for type T");
 			
-
-//			Assign.From(3.0f, ref tv);
-			
-
 			Type thisType = this.GetType();
 			int thisRank = this.Rank;
 			int thisArea = this.Area;
@@ -116,7 +112,6 @@ namespace PST.HyperVolume {
 				throw new ArgumentException("New rank must be less than or equal to current rank", nameof(newShape));
 
 			float[] newIndexScale = new float[Math.Max(newRank, this.Rank)];
-			
 
 			for (int i = 0; i < newIndexScale.Length; i++) {
 				if (i < newRank) {
@@ -220,6 +215,5 @@ namespace PST.HyperVolume {
 
 			GC.SuppressFinalize(this);
 		}
-
 	}
 }

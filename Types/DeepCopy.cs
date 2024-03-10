@@ -1,7 +1,5 @@
-﻿using System.IO;
-using System.Reflection;
-
-namespace PST.Instantiation {
+﻿
+namespace PST.Types {
 	public static class DeepCopy {
 		public static object? DeepCopyStruct(object source, Type? structType, object?[]? args = null) {
 			if (structType is null)
@@ -35,8 +33,6 @@ namespace PST.Instantiation {
 
 			Type type = source.GetType();
 
-			
-
 			if (type.IsArray)
 				return FromArray((Array)source, args);
 
@@ -46,11 +42,10 @@ namespace PST.Instantiation {
 			if (type.IsClass)
 				return FromClass((object)source, args);
 
-//			if (type.IsValueType)
-	//			return FromStruct(source, args);
+			//			if (type.IsValueType)
+			//			return FromStruct(source, args);
 
 			throw new ArgumentException("Type is not an array, enum, class, or struct.", nameof(type));
 		}
-
 	}
 }
