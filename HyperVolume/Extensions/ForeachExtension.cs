@@ -1,6 +1,6 @@
 ﻿using PST.HyperVolume.Selection;
 
-namespace PST.HyperVolume.Extentions {
+namespace PST.HyperVolume.Extensions {
 	static public class ForeachExtension {
 		static public void Foreach<T>(
 			this IHyperVolume<T> volume, 

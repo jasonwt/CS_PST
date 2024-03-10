@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PST.HyperVolume.Extentions.TypeExtensions
+namespace PST.Extensions.TypeExtensions
 {
     static public class CompareToExtension
     {

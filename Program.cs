@@ -1,26 +1,26 @@
-﻿using PST.HyperVolume;
-using PST.HyperVolume.Implementations;
-using PST.HyperVolume.Extentions;
+﻿using PST.HyperVolume.Implementations;
 using System.Diagnostics;
-using System.Security.Cryptography;
 
 static public class Program {
 	public static void Main() {
 		var sw = Stopwatch.StartNew();
 		sw.Start();
 
-		var testVolume = new ArrayHyperVolume<float>(2, 2);
+		var testVolume = new ArrayHyperVolume<float>(2,2);
 		testVolume.TypeInterpolationMethod = (float a, float b, float t) => a + (b - a) * t;
 
-		for (int y = 0; y < testVolume.Shape[1]; y++) {
-			for (int x = 0; x < testVolume.Shape[0]; x++) {
-				testVolume[x, y] = testVolume.Index(x, y);
-			}
+		int volumeArea = testVolume.Area;
+
+		for (int i = 0; i < volumeArea; i++) {
+			int[] indicies = testVolume.Indices(i);
+
+			testVolume[indicies] = (i+1);
 		}
+
 
 		Console.WriteLine(testVolume);
 
-		testVolume.Reshape(3, 3);
+		testVolume.Reshape(3);
 		Console.WriteLine("Reshaped Test Volume\n" + testVolume);
 
 		/*
@@ -30,22 +30,10 @@ static public class Program {
 			elements scale for 2x2 to 3x3 is 0.5 (newShape[n].Length / oldShape[n].Length)
 		 
 			0.0 1.0
-		    2.0 3.0
+			2.0 3.0
 
-				4.0 5.0
-				6.0 7.0
-		 
-			0.0 0.5 1.0
-			1.0 1.5 2.0
-			2.0 2.5 3.0
-
-				2.0 2.5 3.0
-				3.0 3.5 4.0
-				4.0 4.5 5.0
 			
-					4.0 4.5 5.0
-					5.0 5.5 6.0
-					6.0 6.5 7.0
+
 		  
 		 */
 

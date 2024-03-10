@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PST.HyperVolume.Extentions {
+﻿
+namespace PST.HyperVolume.Extensions {
 	public class ThreadingOptions {
 		private int _requestedThreads = 0;
 		private int _minElementsPerThread = 1;

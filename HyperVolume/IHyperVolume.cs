@@ -10,6 +10,7 @@ namespace PST.HyperVolume {
 		object Elements { get; }
 		int Rank { get; }
 		int[] Shape { get; }
+		int[] Strides { get; }
 		int Area { get; }
 
 		T this[int index] { get; set; }

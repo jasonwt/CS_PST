@@ -1,4 +1,4 @@
-﻿namespace PST.HyperVolume.Extentions {
+﻿namespace PST.HyperVolume.Extensions {
 	static public class ToArrayExtension {
 		static public T[] ToArray<T>(
 			this IHyperVolume<T> volume, 

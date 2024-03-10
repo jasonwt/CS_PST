@@ -1,4 +1,4 @@
-﻿namespace PST.HyperVolume.Extentions.TypeExtensions
+﻿namespace PST.Extensions.TypeExtensions
 {
     public interface IComparable<T>
     {

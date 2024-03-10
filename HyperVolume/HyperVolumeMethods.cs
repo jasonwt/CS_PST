@@ -1,4 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
+using PST.Assignments;
+using PST.Extensions;
+using PST.Extensions.TypeExtensions;
 
 namespace PST.HyperVolume {
 	public abstract partial class HyperVolume<T> {
@@ -94,42 +97,36 @@ namespace PST.HyperVolume {
 			if (newShape.Length == 0)
 				throw new ArgumentException("New shape must have at least one dimension", nameof(newShape));
 
+	//		var tv = default(T);
+
+//			Assign.From(3.0f, ref tv);
+			
+
 			Type thisType = this.GetType();
 			int thisRank = this.Rank;
 			int thisArea = this.Area;
 			int[] thisShape = this.Shape;
-
+			
 			int newRank = newShape.Length;
+			float thisRankScale = (float)thisRank / (float)newRank;
+
+			if (newRank > thisRank)
+				throw new ArgumentException("New rank must be less than or equal to current rank", nameof(newShape));
 
 			float[] newIndexScale = new float[Math.Max(newRank, this.Rank)];
-			int[] newStrides = new int[newRank];
-			newStrides[0] = 1;
+			
 
 			for (int i = 0; i < newIndexScale.Length; i++) {
 				if (i < newRank) {
 					if (newShape[i] < 1)
 						throw new ArgumentException("New shape must have all positive values", nameof(newShape));
 
-					if (i == 0)
-						newStrides[0] = 1;
-					else
-						newStrides[i] = newStrides[i - 1] * newShape[i - 1];
-
 					if (i < thisRank) {
-						if (newShape[1] == 1)
-							newIndexScale[i] = 0.5f;
-						else
-							newIndexScale[i] = (float)(_shape[i] - 1.0f) / (float)(newShape[i] - 1.0f);
+						//if (newShape[1] > 1)
+						if (newShape[i] > 1)	
+							newIndexScale[i] = (float)(thisShape[i] - 1.0f) / (float)(newShape[i] - 1.0f);
 					}
-
 				}
-			}
-
-			if (thisRank == newRank) {
-				// compare newShape with thisShape.  If they are the same, do nothing
-				
-			} else {
-				throw new NotImplementedException();
 			}
 
 			IHyperVolume<T>? newVolume = (IHyperVolume<T>?)Activator.CreateInstance(thisType, newShape) ??
@@ -144,36 +141,32 @@ namespace PST.HyperVolume {
 
 				float[] thisIndicies = new float[thisRank];
 
-				for (int j = 0; j < newIndices.Length; j++)
-					thisIndicies[j] = (float)newIndices[j] * newIndexScale[j];
+				for (int j = 0; j < thisRank; j++) {
+					if (j >= newRank)
+						thisIndicies[j] = (float)(thisShape[j] - 1) * 0.5f;
+					else if (newShape[j] == 1)
+						thisIndicies[j] = (float)(thisShape[j] - 1) * 0.5f;
+					else
+						thisIndicies[j] = (float)newIndices[j] * newIndexScale[j];// * thisRankScale;
+				}
 				
 				newVolume[newIndices] = this[thisIndicies];
 			}
 
 			this._shape = newShape;
-			this._strides = newStrides;
 			this._rank = newRank;
 			this._area = newArea;
-			
+			this._strides = newVolume.Strides;
+
 			if (_elements is IDisposable disposable)
 				disposable.Dispose();
 
 			_elements = InstantiateData(newShape);
 
-			for (int i = 0; i < newArea; i++) {
+			for (int i = 0; i < newArea; i++)
 				this[i] = newVolume[i];
-				Console.WriteLine($"this[" + string.Join(", ", newVolume.Indices(i)) + "] = " + this[i]);
 
-			}
-
-			Console.WriteLine("");
-
-			
-
-			
-
-			
-
+			newVolume.Dispose();
 		}
 
 		public override string ToString() {
@@ -183,7 +176,8 @@ namespace PST.HyperVolume {
 				for (int i = 0; i < Shape[0]; i++) {
 					output += "\n";
 					for (int j = 0; j < Shape[1]; j++) {
-						output += $"{this[j, i]} ";
+						var thisValue = this[j,i];
+						output += string.Format("{0:0.00} ", thisValue);
 					}
 				}
 			} else if (Rank == 3) {
@@ -192,7 +186,8 @@ namespace PST.HyperVolume {
 					for (int b = 0; b < Shape[1]; b++) {
 						output += "\n";
 						for (int c = 0; c < Shape[2]; c++) {
-							output += $"{this[c, b, a]} ";
+							var thisValue = this[c, b, a];
+							output += string.Format("{0:0.00} ", thisValue);
 						}
 
 					}

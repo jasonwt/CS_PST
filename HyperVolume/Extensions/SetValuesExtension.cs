@@ -1,6 +1,6 @@
 ﻿using PST.HyperVolume.Selection;
 
-namespace PST.HyperVolume.Extentions {
+namespace PST.HyperVolume.Extensions {
 	static public class SetValuesExtension {
 		static public void SetValues<T>(
 			this IHyperVolume<T> volume, 

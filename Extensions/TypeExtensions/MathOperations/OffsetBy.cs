@@ -1,8 +1,4 @@
-﻿
-using PST.HyperVolume.Extentions.TypeExtensions.MathOperations;
-
-namespace PST.HyperVolume.Extensions.MathOperations
-{
+﻿namespace PST.Extensions.TypeExtensions.MathOperations {
     static public partial class MathExtensions {
 		static public T OffsetBy<T, U>(this T value, U offset) where T : IOffsetable<T, U> =>
 			value.OffsetBy(offset);

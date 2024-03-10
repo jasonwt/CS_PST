@@ -25,7 +25,6 @@ namespace PST.HyperVolume {
 		}
 
 		public virtual T this[params float[] index] {
-			
 			get {
 				if (index.Length != Rank)
 					throw new ArgumentException("Indices must have the same length as the rank", nameof(index));
@@ -77,6 +76,7 @@ namespace PST.HyperVolume {
 		public int Rank => _rank;
 
 		public int[] Shape => _shape;
+		public int[] Strides => _strides;
 
 		public int Area => _area;
 

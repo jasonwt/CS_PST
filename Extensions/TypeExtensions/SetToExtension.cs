@@ -1,7 +1,32 @@
-﻿namespace PST.HyperVolume.Extentions.TypeExtensions
+﻿namespace PST.Extensions.TypeExtensions
 {
-    static public class SetToExtension
-    {
+    static public class SetToExtension {
+        /*
+        public static T SetValue<T, U>(U newValue) {
+            Type typeOfT = typeof(T);
+            Type typeOfU = typeof(U);
+
+            T value = typeOfT switch {
+                ISetable<T, U> settable => ((ISetable<T, U>)newValue).SetTo(newValue),
+				Type t when t == typeof(sbyte) => (T)(object)newValue,
+				Type t when t == typeof(byte) => (T)(object)newValue,
+				Type t when t == typeof(short) => (T)(object)newValue,
+				Type t when t == typeof(ushort) => (T)(object)newValue,
+				Type t when t == typeof(int) => (T)(object)newValue,
+				Type t when t == typeof(uint) => (T)(object)newValue,
+				Type t when t == typeof(long) => (T)(object)newValue,
+				Type t when t == typeof(ulong) => (T)(object)newValue,
+				Type t when t == typeof(float) => (T)(object)newValue,
+				Type t when t == typeof(double) => (T)(object)newValue,
+				Type t when t == typeof(decimal) => (T)(object)newValue,
+				_ => throw new ArgumentException($"Type {typeOfT} is not supported by SetValue")
+			};
+
+            return value;
+        }
+        */
+
+
         public static T SetTo<T, U>(this T value, U newValue) where T : ISetable<T, U> =>
             value.SetTo(newValue);
 

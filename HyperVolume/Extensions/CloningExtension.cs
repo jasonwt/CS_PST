@@ -1,4 +1,4 @@
-﻿namespace PST.HyperVolume.Extentions {
+﻿namespace PST.HyperVolume.Extensions {
 	static public class CloningExtension {
 		static public IHyperVolume<T> Clone<T>(this IHyperVolume<T> instance, ThreadingOptions? threadingOptions = null) {
 			if (instance is null)

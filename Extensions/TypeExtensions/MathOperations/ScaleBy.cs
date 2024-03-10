@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PST.HyperVolume.Extentions.TypeExtensions.MathOperations;
+using PST.Extensions.TypeExtensions.MathOperations;
 
 namespace PST.HyperVolume.Extensions.MathOperations
 {
