@@ -1,14 +1,14 @@
 ﻿using PST.Types;
 using PST.HyperVolume.Selection;
 
-
-namespace PST.HyperVolume.Extensions {
-	static public class SetValuesExtension {
+namespace PST.HyperVolume.Extensions
+{
+    static public class SetValuesExtension {
 		static public void SetValues<T>(
 			this IHyperVolume<T> volume, 
 			Func<IHyperVolume<T>, int, T> computeValueFunc, 
 			ISelection<T>? selection = null,
-			ThreadingOptions? threadingOptions = null) {
+			ThreadingOptions threadingOptions = default) {
 
 			volume.Foreach(
 				(IHyperVolume<T> volume, int index) => volume[index] = computeValueFunc(volume, index), 
@@ -21,7 +21,7 @@ namespace PST.HyperVolume.Extensions {
 			this IHyperVolume<T> volume,
 			U value,
 			ISelection<T>? selection = null,
-			ThreadingOptions? threadingOptions = null) {
+			ThreadingOptions threadingOptions = default) {
 
 			if (value is null)
 				throw new ArgumentNullException(nameof(value));
@@ -42,7 +42,7 @@ namespace PST.HyperVolume.Extensions {
 			this IHyperVolume<T> volume,
 			Func<IHyperVolume<T>, int, T> computeValueFunc,
 			ISelection<T>? selection = null,
-			ThreadingOptions? threadingOptions = null) {
+			ThreadingOptions threadingOptions = default) {
 
 			await volume.ForeachAsync(
 				(IHyperVolume<T> volume, int index) => volume[index] = computeValueFunc(volume, index),
@@ -55,7 +55,7 @@ namespace PST.HyperVolume.Extensions {
 			this IHyperVolume<T> volume,
 			U value,
 			ISelection<T>? selection = null,
-			ThreadingOptions? threadingOptions = null) {
+			ThreadingOptions threadingOptions = default) {
 
 			if (value is null)
 				throw new ArgumentNullException(nameof(value));

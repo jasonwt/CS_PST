@@ -1,6 +1,7 @@
-﻿namespace PST.HyperVolume.Extensions {
-	static public class CloningExtension {
-		static public IHyperVolume<T> Clone<T>(this IHyperVolume<T> instance, ThreadingOptions? threadingOptions = null) {
+﻿namespace PST.HyperVolume.Extensions
+{
+    static public class CloningExtension {
+		static public IHyperVolume<T> Clone<T>(this IHyperVolume<T> instance, ThreadingOptions threadingOptions = default) {
 			if (instance is null)
 				throw new ArgumentNullException("instance", "Instance cannot be null");
 
@@ -30,7 +31,7 @@
 			return newVolume;
 		}
 
-		static public async Task<IHyperVolume<T>> CloneAsync<T>(this IHyperVolume<T> instance, ThreadingOptions? threadingOptions = null) =>
+		static public async Task<IHyperVolume<T>> CloneAsync<T>(this IHyperVolume<T> instance, ThreadingOptions threadingOptions = default) =>
 			await Task.Run(() => Clone(instance, threadingOptions));
 	}
 }

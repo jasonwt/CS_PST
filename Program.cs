@@ -18,6 +18,7 @@ static public class Program {
 			testVolume[indicies] = (i+1);
 		}
 
+		/*
 		testVolume.SetValues((sbyte) 1);
 		testVolume.SetValues((byte)1);
 		testVolume.SetValues((short)1);
@@ -29,10 +30,12 @@ static public class Program {
 		testVolume.SetValues((float)1);
 		testVolume.SetValues((double)1);
 		testVolume.SetValues((decimal)1);
+		*/
 
 		Console.WriteLine(testVolume);
 
-		testVolume.Reshape(3);
+		//testVolume.Reshape(3);
+		testVolume.Reshape(3, 3);
 		Console.WriteLine("Reshaped Test Volume\n" + testVolume);
 
 		/*		 

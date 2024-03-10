@@ -1,19 +1,19 @@
 ﻿using PST.HyperVolume.Selection;
 
-namespace PST.HyperVolume.Extensions {
-	static public class ForeachExtension {
+namespace PST.HyperVolume.Extensions
+{
+    static public class ForeachExtension {
 		static public void Foreach<T>(
 			this IHyperVolume<T> volume, 
 			Action<IHyperVolume<T>, int> action, 
 			ISelection<T>? selection = null, 
-			ThreadingOptions? threadingOptions = null) {
+			ThreadingOptions threadingOptions = default) {
 
 			if (action is null)
 				throw new ArgumentNullException(nameof(action));
 			
 			int volumeArea = volume.Area;
-
-			int threadsToUse = threadingOptions?.ThreadsToUse(volumeArea) ?? 1;
+			int threadsToUse = threadingOptions.ThreadsToUse(volumeArea);
 
 			if (threadsToUse <= 1) {
 				for (int i = 0; i < volumeArea; i++) {
@@ -42,18 +42,18 @@ namespace PST.HyperVolume.Extensions {
 		}
 
 		static public void Foreach<T>(this IHyperVolume<T> volume, Action<IHyperVolume<T>, int> action, ISelection<T> selection) =>
-			Foreach(volume, action, selection, null);
+			Foreach(volume, action, selection, new ThreadingOptions());
 
 		static public void Foreach<T>(this IHyperVolume<T> volume, Action<IHyperVolume<T>, int> action, ThreadingOptions threadingOptions) =>
 			Foreach(volume, action, null, threadingOptions);
 
 		/********************************************* ASYNC METHODS *********************************************/
 
-		static public async Task ForeachAsync<T>(this IHyperVolume<T> volume, Action<IHyperVolume<T>, int> action, ISelection<T>? selection = null, ThreadingOptions? threadingOptions = null) =>
+		static public async Task ForeachAsync<T>(this IHyperVolume<T> volume, Action<IHyperVolume<T>, int> action, ISelection<T>? selection = null, ThreadingOptions threadingOptions = default) =>
 			await Task.Run(() => Foreach<T>(volume, action, selection, threadingOptions));
 
 		static public async Task ForeachAsync<T>(this IHyperVolume<T> volume, Action<IHyperVolume<T>, int> action, ISelection<T> selection) =>
-			await Task.Run(() => Foreach<T>(volume, action, selection, null));		
+			await Task.Run(() => Foreach<T>(volume, action, selection, new ThreadingOptions()));		
 
 		static public async Task ForeachAsync<T>(this IHyperVolume<T> volume, Action<IHyperVolume<T>, int> action, ThreadingOptions threadingOptions) =>
 			await Task.Run(() => Foreach<T>(volume, action, null, threadingOptions));
