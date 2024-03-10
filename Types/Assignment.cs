@@ -11,13 +11,14 @@
 			Type fromType = from.GetType();
 			Type toType = to.GetType();
 
-			if (typeof(IAssignFrom).IsAssignableFrom(toType)) 
+			if (typeof(IAssignFrom).IsAssignableFrom(toType))
             {
+                // Why do I need this?  AssignFrom does not return a value.
 				((IAssignFrom)to).AssignFrom(from);
 				return true;
 			}
 
-			if (typeof(IAssignTo).IsAssignableFrom(fromType)) 
+			if (typeof(IAssignTo).IsAssignableFrom(fromType))
             {
 				((IAssignTo)from).AssignTo(ref to);
 				return true;

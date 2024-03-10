@@ -12,7 +12,7 @@
                 throw new ArgumentException("New shape must not be null and have at least one dimension", nameof(newShape));
             }
 
-			var assignmentMethod = Assignment.AssignToMethod(typeof(float), typeof(T)) ??
+			object? assignmentMethod = Assignment.AssignToMethod(typeof(float), typeof(T)) ??
                 throw new InvalidOperationException("No assignment method found for type T");
 
 			Type thisType = GetType();
@@ -31,7 +31,7 @@
 			float[] newIndexScale = new float[Math.Max(newRank, Rank)];
 
             // TODO: This needs to be refactored
-			for (int i = 0; i < newRank; i++) 
+			for (int i = 0; i < newRank; i++)
             {
                 if (newShape[i] < 1)
                 {

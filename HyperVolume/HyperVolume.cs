@@ -1,8 +1,8 @@
-﻿using System.Reflection;
-using System.Runtime.CompilerServices;
+﻿namespace PST.HyperVolume {
+    using System.Reflection;
+    using System.Runtime.CompilerServices;
 
-namespace PST.HyperVolume {
-	public abstract partial class HyperVolume<T> : IHyperVolume<T> {
+    public abstract partial class HyperVolume<T> : IHyperVolume<T> {
 		/******************************* PRIVATE MEMBERS *******************************/
 
 		private object _disposeLock = new();
@@ -26,27 +26,29 @@ namespace PST.HyperVolume {
 
 		public virtual T this[params float[] index] {
 			get {
-				if (index.Length != Rank)
-					throw new ArgumentException("Indices must have the same length as the rank", nameof(index));
+                if (index.Length != Rank)
+                {
+                    throw new ArgumentException("Indices must have the same length as the rank", nameof(index));
+                }
 
 				int[] valueIndicies = new int[Rank];
 				float[] weights = new float[Rank];
 
-				for (int i = 0; i < Rank; i++) {
+				for (int i = 0; i < Rank; i++) 
+                {
 					valueIndicies[i] = (int)index[i];
 					weights[i] = index[i] - valueIndicies[i];
 				}
 
 				int maxValues = 1 << Rank;
 
-				T[] values = new T[maxValues];
+				var values = new T[maxValues];
 
-				for (int i = 0; i < maxValues; i++) {
-					for (int j = 0; j < Rank; j++) {
-						if ((i & (1 << j)) != 0)
-							valueIndicies[j] = FastCeil(index[j]);
-						else
-							valueIndicies[j] = FastFloor(index[j]);
+				for (int i = 0; i < maxValues; i++) 
+                {
+					for (int j = 0; j < Rank; j++) 
+                    {
+                        valueIndicies[j] = (i & (1 << j)) != 0 ? FastCeil(index[j]) : FastFloor(index[j]);
 					}
 
 					values[i] = this[valueIndicies];
@@ -55,9 +57,12 @@ namespace PST.HyperVolume {
 				int numIterations = values.Length / 2;
 				int weightsIndex = 0;
 
-				while (numIterations >= 1) {
-					for (int i = 0; i < numIterations; i++)
-						values[i] = TypeInterpolationMethod(values[i * 2], values[(i * 2) + 1], weights[weightsIndex]);
+				while (numIterations >= 1) 
+                {
+                    for (int i = 0; i < numIterations; i++)
+                    {
+                        values[i] = TypeInterpolationMethod(values[i * 2], values[(i * 2) + 1], weights[weightsIndex]);
+                    }
 
 					numIterations /= 2;
 					weightsIndex++;
@@ -90,31 +95,35 @@ namespace PST.HyperVolume {
 		public HyperVolume(int[] shape) : this(null, shape) { }
 
 		public HyperVolume(object? data, int[] shape) {
-			if (shape is null)
-				throw new ArgumentNullException("shape");
-
-			if (shape.Length == 0)
-				throw new ArgumentException("shape must have at least one dimension");
-
+            if (shape is null || shape.Length == 0)
+            {
+                throw new ArgumentException("shape must not be null and have at least one dimension");
+            }
+            
 			_rank = shape.Length;
 			_shape = shape;
 
 			_strides = new int[Rank];
 			_strides[0] = 1;
 
-			for (int i = 1; i < shape.Length; i++) {
-				if (shape[i] < 1)
-					throw new ArgumentException("shape must have all positive values");
+			for (int i = 1; i < shape.Length; i++) 
+            {
+                if (shape[i] < 1)
+                {
+                    throw new ArgumentException("shape must have all positive values");
+                }
 
 				_strides[i] = _strides[i - 1] * shape[i - 1];
 			}
-			
+
 			_area = _strides[^1] * shape[^1];
 
 			_elements = InstantiateData(shape, data);
 
-			if (_elements is null)
-				throw new InvalidOperationException("InstantiateData must return a non-null object");
+            if (_elements is null)
+            {
+                throw new InvalidOperationException("InstantiateData must return a non-null object");
+            }
 		}
 
 		~HyperVolume() {

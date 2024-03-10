@@ -1,6 +1,6 @@
-﻿using System.ComponentModel;
+﻿namespace PST.HyperVolume {
+    using System.ComponentModel;
 
-namespace PST.HyperVolume {
     public struct ThreadingOptions {
         private int _requestedThreads = 0;
         private int _minElementsPerThread = 1;

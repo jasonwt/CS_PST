@@ -2,16 +2,22 @@
 namespace PST.Types {
 	public static class DeepCopy {
 		public static object? DeepCopyStruct(object source, Type? structType, object?[]? args = null) {
-			if (structType is null)
-				return null;
+            if (structType is null)
+            {
+                return null;
+            }
 
-			if (!structType.IsValueType)
-				throw new ArgumentException("Type is not a struct.", nameof(structType));
+            if (!structType.IsValueType)
+            {
+                throw new ArgumentException("Type is not a struct.", nameof(structType));
+            }
 
-			var newStruct = Activator.CreateInstance(structType);
+			object? newStruct = Activator.CreateInstance(structType);
 
-			if (newStruct is null)
-				throw new ArgumentNullException(nameof(newStruct));
+            if (newStruct is null)
+            {
+                throw new ArgumentNullException(nameof(newStruct));
+            }
 
 			return newStruct;
 		}
@@ -28,24 +34,21 @@ namespace PST.Types {
 		}
 
 		public static object From(object source, params object?[] args) {
-			if (source is null)
-				throw new ArgumentNullException(nameof(source));
+            if (source is null)
+            {
+                throw new ArgumentNullException(nameof(source));
+            }
 
 			Type type = source.GetType();
 
-			if (type.IsArray)
-				return FromArray((Array)source, args);
-
-			if (type.IsEnum)
-				return Enum.ToObject(type, args);
-
-			if (type.IsClass)
-				return FromClass((object)source, args);
-
-			//			if (type.IsValueType)
-			//			return FromStruct(source, args);
-
-			throw new ArgumentException("Type is not an array, enum, class, or struct.", nameof(type));
+            return type switch
+            {
+                _ when type.IsArray => FromArray((Array)source, args),
+                _ when type.IsEnum => Enum.ToObject(type, args),
+                _ when type.IsClass => FromClass((object)source, args),
+                //_ when type.IsValueType => FromStruct(source, args),
+                _ => throw new ArgumentException("Type is not an array, enum, class, or struct.", nameof(type)),
+            };
 		}
 	}
 }

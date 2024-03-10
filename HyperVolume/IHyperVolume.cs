@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PST.HyperVolume {
+﻿namespace PST.HyperVolume {
 	public interface IHyperVolume<T> : IDisposable {
 		bool IsDisposed { get; }
 		object Elements { get; }
@@ -26,7 +20,5 @@ namespace PST.HyperVolume {
 
 		//int BlockCopy(object a, object b);
 		void Reshape(int[] newShape);
-
-		
 	}
 }

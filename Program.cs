@@ -7,12 +7,15 @@ static public class Program {
 		var sw = Stopwatch.StartNew();
 		sw.Start();
 
-		var testVolume = new ArrayHyperVolume<float>(2,2);
-		testVolume.TypeInterpolationMethod = (float a, float b, float t) => a + (b - a) * t;
+        var testVolume = new ArrayHyperVolume<float>(2, 2)
+        {
+            TypeInterpolationMethod = (float a, float b, float t) => a + (b - a) * t
+        };
 
-		int volumeArea = testVolume.Area;
+        int volumeArea = testVolume.Area;
 
-		for (int i = 0; i < volumeArea; i++) {
+		for (int i = 0; i < volumeArea; i++) 
+        {
 			int[] indicies = testVolume.Indices(i);
 
 			testVolume[indicies] = (i+1);
@@ -66,7 +69,7 @@ static public class Program {
 		sw.Stop();
 		Console.WriteLine(sw.ElapsedTicks);
 
-		Console.ReadKey();
+		_ = Console.ReadKey();
 	}
 }
 
