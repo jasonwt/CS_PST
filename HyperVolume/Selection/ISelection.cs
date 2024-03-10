@@ -1,5 +1,4 @@
 ﻿
-
 namespace PST.HyperVolume.Selection {
 	public interface ISelection<T> {
 		float SelectionThreshold { get; set; }

@@ -1,18 +1,19 @@
-﻿using PST.Types;
-using PST.HyperVolume.Selection;
-
-namespace PST.HyperVolume.Extensions
+﻿namespace PST.HyperVolume.Extensions
 {
+
+    using PST.Types;
+    using PST.HyperVolume.Selection;
+
     static public class SetValuesExtension {
 		static public void SetValues<T>(
-			this IHyperVolume<T> volume, 
-			Func<IHyperVolume<T>, int, T> computeValueFunc, 
+			this IHyperVolume<T> volume,
+			Func<IHyperVolume<T>, int, T> computeValueFunc,
 			ISelection<T>? selection = null,
 			ThreadingOptions threadingOptions = default) {
 
 			volume.Foreach(
-				(IHyperVolume<T> volume, int index) => volume[index] = computeValueFunc(volume, index), 
-				selection, 
+				(IHyperVolume<T> volume, int index) => volume[index] = computeValueFunc(volume, index),
+				selection,
 				threadingOptions
 			);
 		}
@@ -23,8 +24,10 @@ namespace PST.HyperVolume.Extensions
 			ISelection<T>? selection = null,
 			ThreadingOptions threadingOptions = default) {
 
-			if (value is null)
-				throw new ArgumentNullException(nameof(value));
+            if (value is null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
 
 			object assignmentValue = default(T) ?? throw new Exception();
 
@@ -37,6 +40,8 @@ namespace PST.HyperVolume.Extensions
 				threadingOptions
 			);
 		}
+
+/*
 
 		static public async Task SetValuesAsync<T>(
 			this IHyperVolume<T> volume,
@@ -71,5 +76,6 @@ namespace PST.HyperVolume.Extensions
 				threadingOptions
 			);
 		}
+*/
 	}
 }
