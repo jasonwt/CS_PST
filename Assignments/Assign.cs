@@ -15,10 +15,48 @@ namespace PST.Assignments {
 			Type fromType = from.GetType();
 			Type toType = to.GetType();
 
-			AssignmentDelegate? assignment = Method(fromType, toType);
-			if (assignment != null) {
-				assignment(from, ref to);
+			if (typeof(IAssignFrom).IsAssignableFrom(toType)) {
+				((IAssignFrom)to).AssignFrom(from);
 				return true;
+			}
+
+			if (typeof(IAssignTo).IsAssignableFrom(fromType)) {
+				((IAssignTo)from).AssignTo(ref to);
+				return true;
+			}
+
+			switch (Type.GetTypeCode(fromType)) {
+				case TypeCode.SByte:
+				case TypeCode.Byte:
+				case TypeCode.Int16:
+				case TypeCode.UInt16:
+				case TypeCode.Int32:
+				case TypeCode.UInt32:
+				case TypeCode.Int64:
+				case TypeCode.UInt64:
+				case TypeCode.Single:
+				case TypeCode.Double:
+				case TypeCode.Decimal:
+					break;
+
+				default:
+					return false;
+			}
+
+			switch (Type.GetTypeCode(toType)) {
+				case TypeCode.SByte:
+				case TypeCode.Byte:
+				case TypeCode.Int16:
+				case TypeCode.UInt16:
+				case TypeCode.Int32:
+				case TypeCode.UInt32:
+				case TypeCode.Int64:
+				case TypeCode.UInt64:
+				case TypeCode.Single:
+				case TypeCode.Double:
+				case TypeCode.Decimal:
+					to = Convert.ChangeType(from, toType);
+					return true;
 			}
 
 			return false;
