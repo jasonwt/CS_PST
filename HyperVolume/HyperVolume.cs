@@ -1,19 +1,16 @@
 ﻿namespace PST.HyperVolume {
-    using System.Reflection;
-    using System.Runtime.CompilerServices;
-
     public abstract partial class HyperVolume<T> : IHyperVolume<T> {
 		/******************************* PRIVATE MEMBERS *******************************/
 
-		private object _disposeLock = new();
+		private readonly object disposeLock = new();
 
-		private object _elements;
-		private int[] _shape;
-		private int[] _strides;
-		private int _rank;
-		private int _area;
-		
-		private Func<T, T, float, T>? _typeInterpolationMethod = null;
+		private object elements;
+		private int[] shape;
+		private int[] strides;
+		private int rank;
+		private int area;
+
+		private Func<T, T, float, T>? typeInterpolationMethod = null;
 
 		/******************************* PUBLIC INDEXERS *******************************/
 
@@ -34,7 +31,7 @@
 				int[] valueIndicies = new int[Rank];
 				float[] weights = new float[Rank];
 
-				for (int i = 0; i < Rank; i++) 
+				for (int i = 0; i < Rank; i++)
                 {
 					valueIndicies[i] = (int)index[i];
 					weights[i] = index[i] - valueIndicies[i];
@@ -44,9 +41,9 @@
 
 				var values = new T[maxValues];
 
-				for (int i = 0; i < maxValues; i++) 
+				for (int i = 0; i < maxValues; i++)
                 {
-					for (int j = 0; j < Rank; j++) 
+					for (int j = 0; j < Rank; j++)
                     {
                         valueIndicies[j] = (i & (1 << j)) != 0 ? FastCeil(index[j]) : FastFloor(index[j]);
 					}
@@ -54,19 +51,15 @@
 					values[i] = this[valueIndicies];
 				}
 
-				int numIterations = values.Length / 2;
 				int weightsIndex = 0;
 
-				while (numIterations >= 1) 
+                for (int numIterations = values.Length / 2; numIterations >= 1; numIterations /= 2, weightsIndex++)
                 {
                     for (int i = 0; i < numIterations; i++)
                     {
                         values[i] = TypeInterpolationMethod(values[i * 2], values[(i * 2) + 1], weights[weightsIndex]);
                     }
-
-					numIterations /= 2;
-					weightsIndex++;
-				}
+                }
 
 				return values[0];
 			}
@@ -76,51 +69,40 @@
 
 		public bool IsDisposed { get; set; } = false;
 
-		public virtual object Elements => _elements;
+		public virtual object Elements => elements;
 
-		public int Rank => _rank;
+		public int Rank => rank;
 
-		public int[] Shape => _shape;
-		public int[] Strides => _strides;
+		public int[] Shape => shape;
+		public int[] Strides => strides;
 
-		public int Area => _area;
+		public int Area => area;
 
 		public Func<T, T, float, T> TypeInterpolationMethod {
-			get => _typeInterpolationMethod ?? DefaultTypeInterpolationMethod;
-			set => _typeInterpolationMethod = value ?? DefaultTypeInterpolationMethod;
+			get => typeInterpolationMethod ?? DefaultTypeInterpolationMethod;
+			set => typeInterpolationMethod = value ?? DefaultTypeInterpolationMethod;
 		}
 
 		/******************************* CONSTRUCTORS ******************************/
 
-		public HyperVolume(int[] shape) : this(null, shape) { }
+		protected HyperVolume(int[] shape) : this(null, shape) { }
 
-		public HyperVolume(object? data, int[] shape) {
+		protected HyperVolume(object? data, int[] shape) {
             if (shape is null || shape.Length == 0)
             {
                 throw new ArgumentException("shape must not be null and have at least one dimension");
             }
-            
-			_rank = shape.Length;
-			_shape = shape;
 
-			_strides = new int[Rank];
-			_strides[0] = 1;
+			rank = shape.Length;
+			this.shape = shape;
 
-			for (int i = 1; i < shape.Length; i++) 
-            {
-                if (shape[i] < 1)
-                {
-                    throw new ArgumentException("shape must have all positive values");
-                }
+            strides = ComputeStrides(shape);
 
-				_strides[i] = _strides[i - 1] * shape[i - 1];
-			}
+			area = Strides[^1] * shape[^1];
 
-			_area = _strides[^1] * shape[^1];
+			elements = InstantiateData(shape, data);
 
-			_elements = InstantiateData(shape, data);
-
-            if (_elements is null)
+            if (elements is null)
             {
                 throw new InvalidOperationException("InstantiateData must return a non-null object");
             }

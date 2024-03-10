@@ -1,62 +1,60 @@
-﻿
-
-namespace PST.HyperVolume.Selection.Implementations {
+﻿namespace PST.HyperVolume.Selection.Implementations {
 	public class VolumeSelection<T> : Selection<T> {
-		internal struct SelectionVolume {
+		internal readonly struct SelectionVolume {
 			public int[] MinIndicies { get; }
 			public int[] MaxIndices { get; }
 			public float SelectionStrength { get; }
 
-			public SelectionVolume(int[] minIndicies, int[] maxIndices, float selectionStrength = 1.0f) {
-                if (minIndicies is null || maxIndices is null)
+			public SelectionVolume(int[] minIndicies, int[] maxIndiceis, float selectionStrength = 1.0f) {
+                if (minIndicies is null || maxIndiceis is null)
                 {
-                    throw new ArgumentNullException();
+                    throw new ArgumentNullException(minIndicies is null ? nameof(minIndicies) : nameof(maxIndiceis), "minIndices and maxIndicies must not be null.");
                 }
 
-                if (minIndicies.Length == 0 || maxIndices.Length == 0)
+                if (minIndicies.Length == 0 || maxIndiceis.Length == 0)
                 {
                     throw new ArgumentException("minIndicies and maxIndices must have at least one element.");
                 }
 
-                if (minIndicies.Length != maxIndices.Length)
+                if (minIndicies.Length != maxIndiceis.Length)
                 {
                     throw new ArgumentException("minIndicies and maxIndices must have the same length.");
                 }
 
                 if (selectionStrength is < 0.0f or > 1.0f)
                 {
-                    throw new ArgumentOutOfRangeException("SelectionStrength must be between 0 and 1.");
+                    throw new ArgumentOutOfRangeException(nameof(selectionStrength), "SelectionStrength must be between 0 and 1.");
                 }
 
-				for (int i = 0; i < minIndicies.Length; i++) 
+				for (int i = 0; i < minIndicies.Length; i++)
                 {
-                    if (minIndicies[i] < 0 || maxIndices[i] < 0)
+                    if (minIndicies[i] < 0 || maxIndiceis[i] < 0)
                     {
                         throw new ArgumentException("minIndicies and maxIndices must be greater than or equal to 0.");
                     }
 
-                    if (minIndicies[i] > maxIndices[i])
+                    if (minIndicies[i] > maxIndiceis[i])
                     {
                         throw new ArgumentException("minIndicies must be less than or equal to maxIndices.");
                     }
 				}
 
 				MinIndicies = minIndicies;
-				MaxIndices = maxIndices;
+				MaxIndices = maxIndiceis;
 				SelectionStrength = selectionStrength;
 			}
 		}
 
-		private readonly List<SelectionVolume> _selectionVolumes = new();
+		private readonly List<SelectionVolume> selectionVolumes = new();
 
 		public void AddVolume(int[] minIndices, int[] maxIndicies, float selectionStrength = 1.0f) {
-			_selectionVolumes.Add(new SelectionVolume(minIndices, maxIndicies, selectionStrength));
+			selectionVolumes.Add(new SelectionVolume(minIndices, maxIndicies, selectionStrength));
 		}
 
 		public override bool InitSelection(IHyperVolume<T> volume, float strengthThreshold = 0) {
             if (volume is null)
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(volume), "volume must not be null");
             }
 
             if (!base.InitSelection(volume, strengthThreshold))
@@ -64,7 +62,7 @@ namespace PST.HyperVolume.Selection.Implementations {
                 return false;
             }
 
-			foreach (SelectionVolume record in _selectionVolumes) 
+			foreach (SelectionVolume record in selectionVolumes)
             {
                 if (record.MinIndicies.Length > volume.Rank || record.MaxIndices.Length > volume.Rank)
                 {
@@ -80,7 +78,7 @@ namespace PST.HyperVolume.Selection.Implementations {
 
 			float selectionStrength = 0.0f;
 
-			foreach (SelectionVolume record in _selectionVolumes)
+			foreach (SelectionVolume record in selectionVolumes)
             {
 				for (int i = 0; i < record.MinIndicies.Length; ++i)
                 {

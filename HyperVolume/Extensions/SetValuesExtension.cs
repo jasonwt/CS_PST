@@ -1,16 +1,10 @@
 ﻿namespace PST.HyperVolume.Extensions
 {
-
     using PST.Types;
     using PST.HyperVolume.Selection;
 
     static public class SetValuesExtension {
-		static public void SetValues<T>(
-			this IHyperVolume<T> volume,
-			Func<IHyperVolume<T>, int, T> computeValueFunc,
-			ISelection<T>? selection = null,
-			ThreadingOptions threadingOptions = default) {
-
+		static public void SetValues<T>(this IHyperVolume<T> volume, Func<IHyperVolume<T>, int, T> computeValueFunc, ISelection<T>? selection = null, ThreadingOptions threadingOptions = default) {
 			volume.Foreach(
 				(IHyperVolume<T> volume, int index) => volume[index] = computeValueFunc(volume, index),
 				selection,
@@ -18,12 +12,7 @@
 			);
 		}
 
-		static public void SetValues<T, U>(
-			this IHyperVolume<T> volume,
-			U value,
-			ISelection<T>? selection = null,
-			ThreadingOptions threadingOptions = default) {
-
+		static public void SetValues<T, U>(this IHyperVolume<T> volume, U value, ISelection<T>? selection = null, ThreadingOptions threadingOptions = default) {
             if (value is null)
             {
                 throw new ArgumentNullException(nameof(value));

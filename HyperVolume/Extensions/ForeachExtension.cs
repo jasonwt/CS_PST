@@ -3,12 +3,7 @@
     using PST.HyperVolume.Selection;
 
     static public class ForeachExtension {
-		static public void Foreach<T>(
-			this IHyperVolume<T> volume,
-			Action<IHyperVolume<T>, int> action,
-			ISelection<T>? selection = null,
-			ThreadingOptions threadingOptions = default) {
-
+		static public void Foreach<T>(this IHyperVolume<T> volume, Action<IHyperVolume<T>, int> action, ISelection<T>? selection = null, ThreadingOptions threadingOptions = default) {
             if (action is null)
             {
                 throw new ArgumentNullException(nameof(action));
@@ -39,12 +34,15 @@
 					int localStart = i * threadBlockSize;
 					int localEnd = (i == threadsToUse - 1) ? volumeArea : localStart + threadBlockSize;
 
-					for (int j = localStart; j < localEnd; j++) {
+					for (int j = localStart; j < localEnd; j++)
+                    {
 						float selectionStrength = selection?.SelectionStrength(volume, j) ?? 0;
 						float selectionThreshold = selection?.SelectionThreshold ?? 0;
 
-						if (selectionStrength >= selectionThreshold)
-							action(volume, j);
+                        if (selectionStrength >= selectionThreshold)
+                        {
+                            action(volume, j);
+                        }
 					}
 				});
 			}

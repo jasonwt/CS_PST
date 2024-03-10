@@ -44,15 +44,11 @@ namespace PST.Types {
 
             if (enumValues.Length == 0)
             {
-                throw new ArgumentException("Enum has no values.", nameof(enumValues));
+                throw new ArgumentException(nameof(enumValues), "Enum has no values.");
             }
 
-			selectedValue ??= enumValues.GetValue(0) as int?;
-
-            if (selectedValue is null)
-            {
+			selectedValue ??= enumValues.GetValue(0) as int? ??
                 throw new ArgumentNullException(nameof(selectedValue), "Selected value is null.");
-            }
 
 			return (Enum)Enum.ToObject(enumType, selectedValue);
 		}
@@ -68,7 +64,7 @@ namespace PST.Types {
                 throw new ArgumentException("Type is not a class.", nameof(classType));
             }
 
-			if (args is not null) 
+			if (args is not null)
             {
 				// create new class from type with args
 				object? newClass = Activator.CreateInstance(classType, args);
@@ -95,7 +91,6 @@ namespace PST.Types {
 						if (parameters.Length == 0)
                         {
 							newInstance = constructor.Invoke(null);
-
 						}
                         else
                         {
@@ -123,7 +118,8 @@ namespace PST.Types {
 			throw new ArgumentException("Can not auto construct class.", nameof(classType));
 		}
 
-		public static object? InstantiateStruct(Type? structType, object?[]? args = null) {
+        // TODO: refector arguments
+		public static object? InstantiateStruct(Type? structType) {
             if (structType is null)
             {
                 return null;
@@ -150,7 +146,7 @@ namespace PST.Types {
                 return null;
             }
 
-			if (type.IsArray) 
+			if (type.IsArray)
             {
                 if (args is null || args.Length == 0)
                 {
@@ -174,7 +170,7 @@ namespace PST.Types {
 
 			if (type.IsEnum)
             {
-                if (args is not null && args.Length > 1)
+                if (args?.Length > 1)
                 {
                     throw new ArgumentException("args must have at most one element.");
                 }
@@ -191,7 +187,7 @@ namespace PST.Types {
 
 			if (type.IsValueType)
             {
-                if (args is not null && args.Length > 0)
+                if (args?.Length > 0)
                 {
                     throw new ArgumentException("args must have at most zero elements.");
                 }

@@ -24,14 +24,15 @@
         }
 
         protected override object InstantiateData(int[] shape, object? data = null) {
-            if (shape is null)
+            if (shape is null || shape.Length == 0)
             {
-                throw new ArgumentNullException("shape");
+                throw new ArgumentException("shape must not be null and have at least one dimension");
             }
 
             int totalArrayLength = 1;
 
-            foreach (int length in shape) {
+            foreach (int length in shape) 
+            {
                 if (length <= 0)
                 {
                     throw new ArgumentOutOfRangeException(nameof(shape), "All lengths must be greater than 0.");

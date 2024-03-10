@@ -69,21 +69,19 @@
 				volume[newIndices] = this[thisIndicies];
 			}, reshapeOptions.ThreadingOptions);
 
-			_shape = newShape;
-			_rank = newRank;
-			_area = newArea;
-			_strides = newVolume.Strides;
+			shape = newShape;
+			rank = newRank;
+			area = newArea;
+			strides = newVolume.Strides;
 
-            if (_elements is IDisposable disposable)
+            if (elements is IDisposable disposable)
             {
                 disposable.Dispose();
             }
 
-			_elements = InstantiateData(newShape);
+			elements = InstantiateData(newShape);
 
-			this.Foreach((IHyperVolume<T> volume, int index) => {
-				volume[index] = newVolume[index];
-			}, reshapeOptions.ThreadingOptions);
+			this.Foreach((IHyperVolume<T> volume, int index) => volume[index] = newVolume[index], reshapeOptions.ThreadingOptions);
 
 			newVolume.Dispose();
 		}

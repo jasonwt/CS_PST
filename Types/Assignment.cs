@@ -64,16 +64,12 @@
 		static public AssignmentDelegate? AssignToMethod(Type fromType, Type toType) {
 			if (typeof(IAssignFrom).IsAssignableFrom(toType)) 
             {
-				return (object from, ref object to) => {
-					((IAssignFrom)to).AssignFrom(from);
-				};
+				return (object from, ref object to) => ((IAssignFrom)to).AssignFrom(from);
 			}
 
 			if (typeof(IAssignTo).IsAssignableFrom(fromType)) 
             {
-				return (object from, ref object to) => {
-					((IAssignTo)from).AssignTo(ref to);
-				};
+				return (object from, ref object to) => ((IAssignTo)from).AssignTo(ref to);
 			}
 
 			switch (Type.GetTypeCode(fromType)) {

@@ -1,12 +1,7 @@
 ﻿namespace PST.HyperVolume.Extensions {
 	static public class ToArrayExtension {
         // TODO: This method needs lots of refectoring
-		static public T[] ToArray<T>(
-			this IHyperVolume<T> volume,
-			int? startingIndex = null,
-			int? endingIndex = null,
-			int? requestedThreads = null) {
-
+		static public T[] ToArray<T>(this IHyperVolume<T> volume, int? startingIndex = null, int? endingIndex = null, int? requestedThreads = null) {
 			int area = volume.Area;
 
 			int start = startingIndex ?? 0;
@@ -25,7 +20,7 @@
 
             if (end <= start)
             {
-                throw new ArgumentException("Ending index must be greater than the starting index", nameof(end));
+                throw new ArgumentException("Ending index must be greater than the starting index");
             }
 
             if (threads < 0)
@@ -60,7 +55,9 @@
                         newArray[j - localStart] = volume[j];
                     }
 				});
-			} else {
+			}
+            else
+            {
                 for (int i = (int)start; i < end; i++)
                 {
                     newArray[i - (int)start] = volume[i];

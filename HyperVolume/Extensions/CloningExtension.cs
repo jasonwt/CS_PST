@@ -4,7 +4,7 @@
 		static public IHyperVolume<T> Clone<T>(this IHyperVolume<T> instance, ThreadingOptions threadingOptions = default) {
             if (instance is null)
             {
-                throw new ArgumentNullException("instance", "Instance cannot be null");
+                throw new ArgumentNullException(nameof(instance), "Instance cannot be null");
             }
 
 			Type instanceType = instance.GetType();
