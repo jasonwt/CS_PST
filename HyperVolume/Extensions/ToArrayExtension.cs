@@ -10,6 +10,8 @@
 
 			int start = startingIndex ?? 0;
 			int end = endingIndex ?? area;
+
+            // REVIEW: You're repeating an implementation detail here that I've seen elsewhere. If you're going to use this pattern in multiple places, consider making it an `internal Lazy<int>` static property.
 			int threads = Math.Min(requestedThreads ?? 0, Environment.ProcessorCount - 1);
 
 			if (start < 0 || start >= area)
@@ -27,7 +29,9 @@
 			int blockSize = end - start;
 			T[] newArray = new T[blockSize];
 
+            // REVIEW: Why is 100 the magic number here? Why not 25 or 50? What is the significance of 100?
 			if (threads > 1 && blockSize > 100) {
+                // REVIEW: unnecessary cast
 				int threadBlockSize = area / (int)threads;
 
 				if (threadBlockSize < 25) {
@@ -46,6 +50,7 @@
 						newArray[j - localStart] = volume[j];
 				});
 			} else {
+                // REVIEW: why are you casting?
 				for (int i = (int)start; i < end; i++)
 					newArray[i - (int)start] = volume[i];
 			}
@@ -59,6 +64,7 @@
 		static public T[] ToArray<T>(this IHyperVolume<T> volume, int requestedThreads) =>
 			ToArray(volume, 0, volume.Area, requestedThreads);
 
+        // REVIEW: Remove async and await. This method is not doing any async work.
 		static public async Task<T[]> ToArrayAsync<T>(
 			this IHyperVolume<T> volume,
 			int? startingIndex = null,
@@ -68,7 +74,9 @@
 			return await Task.Run(() => ToArray(volume, startingIndex, endingIndex, requestedThreads));
 		}
 
-		static public async Task<T[]> ToArrayAsync<T>(
+        // REVIEW: Remove async and await. This method is not doing any async work.
+        // REVIEW: You should review whether these ToArrayAsync methods are really necessary. They don't seem to be adding much value... but maybe I'm missing something?
+        static public async Task<T[]> ToArrayAsync<T>(
 			this IHyperVolume<T> volume,
 			int startingIndex,
 			int endingIndex) {
@@ -76,7 +84,8 @@
 			return await Task.Run(() => ToArray(volume, startingIndex, endingIndex, 0));
 		}
 
-		static public async Task<T[]> ToArrayAsync<T>(
+        // REVIEW: Remove async and await. This method is not doing any async work.
+        static public async Task<T[]> ToArrayAsync<T>(
 			this IHyperVolume<T> volume,
 			int requestedThreads) {
 

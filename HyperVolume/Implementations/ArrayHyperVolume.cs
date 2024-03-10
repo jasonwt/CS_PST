@@ -19,10 +19,17 @@
             }
         }
 
+        // REVIEW: Why are you using `object` for data? Shouldn't the caller know what's being stored in the shape?
         protected override object InstantiateData(int[] shape, object? data = null) {
             if (shape is null)
                 throw new ArgumentNullException("shape");
 
+            // REVIEW: As an alternative to using a foreach loop, you could use LINQ's Aggregate method.
+            //int totalArrayLength = shape.Aggregate((acc, cur) => acc * cur);
+            //if (totalArrayLength == 0)
+            //{
+            //    throw new ArgumentOutOfRangeException(nameof(shape), "All lengths must be greater than 0.");
+            //}
             int totalArrayLength = 1;
 
             foreach (var length in shape) {
@@ -35,6 +42,7 @@
             if (data is null)
                 return new T[totalArrayLength];
 
+            // REVIEW: This is a code smell. Why are you allowing the caller to even pass in data that is not of type T[]?
             if (data is not T[] dataArray)
                 throw new ArgumentException("Data must be of type T[]", nameof(data));
 

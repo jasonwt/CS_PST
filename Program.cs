@@ -22,6 +22,8 @@ static public class Program {
 		testVolume.SetValues((byte)1);
 		testVolume.SetValues((short)1);
 		testVolume.SetValues((ushort)1);
+
+		// REVIEW: cast not needed
 		testVolume.SetValues((int)1);
 		testVolume.SetValues((uint)1);
 		testVolume.SetValues((long)1);
