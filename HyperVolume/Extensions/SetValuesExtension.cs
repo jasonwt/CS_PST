@@ -1,4 +1,5 @@
-﻿using PST.HyperVolume.Selection;
+﻿using PST.Assignments;
+using PST.HyperVolume.Selection;
 
 namespace PST.HyperVolume.Extensions {
 	static public class SetValuesExtension {
@@ -15,15 +16,23 @@ namespace PST.HyperVolume.Extensions {
 			);
 		}
 
-		static public void SetValues<T>(
-			this IHyperVolume<T> volume, 
-			T value,
+		static public void SetValues<T, U>(
+			this IHyperVolume<T> volume,
+			U value,
 			ISelection<T>? selection = null,
 			ThreadingOptions? threadingOptions = null) {
 
+			if (value is null)
+				throw new ArgumentNullException(nameof(value));
+
+			object assignmentValue = default(T) ?? throw new Exception();
+
 			volume.Foreach(
-				(IHyperVolume<T> volume, int index) => volume[index] = value, 
-				selection, 
+				(IHyperVolume<T> volume, int index) => {
+					Assign.To(value, ref assignmentValue);
+					volume[index] = (T) assignmentValue;
+				},
+				selection,
 				threadingOptions
 			);
 		}
@@ -41,14 +50,22 @@ namespace PST.HyperVolume.Extensions {
 			);
 		}
 
-		static public async Task SetValuesAsync<T>(
+		static public async Task SetValuesAsync<T, U>(
 			this IHyperVolume<T> volume,
-			T value,
+			U value,
 			ISelection<T>? selection = null,
 			ThreadingOptions? threadingOptions = null) {
 
+			if (value is null)
+				throw new ArgumentNullException(nameof(value));
+
+			object assignmentValue = default(T) ?? throw new Exception();
+
 			await volume.ForeachAsync(
-				(IHyperVolume<T> volume, int index) => volume[index] = value,
+				(IHyperVolume<T> volume, int index) => {
+					Assign.To(value, ref assignmentValue);
+					volume[index] = (T)assignmentValue;
+				},
 				selection,
 				threadingOptions
 			);

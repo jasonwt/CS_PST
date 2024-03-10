@@ -1,4 +1,5 @@
-﻿using PST.HyperVolume.Implementations;
+﻿using PST.HyperVolume.Extensions;
+using PST.HyperVolume.Implementations;
 using System.Diagnostics;
 
 static public class Program {
@@ -16,6 +17,19 @@ static public class Program {
 
 			testVolume[indicies] = (i+1);
 		}
+
+		testVolume.SetValues((sbyte) 1);
+		testVolume.SetValues((byte)1);
+		testVolume.SetValues((short)1);
+		testVolume.SetValues((ushort)1);
+		testVolume.SetValues((int)1);
+		testVolume.SetValues((uint)1);
+		testVolume.SetValues((long)1);
+		testVolume.SetValues((ulong)1);
+		testVolume.SetValues((float)1);
+		testVolume.SetValues((double)1);
+		testVolume.SetValues((decimal)1);
+
 
 
 		Console.WriteLine(testVolume);
