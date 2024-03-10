@@ -17,6 +17,7 @@
 
 		int Index(params int[] indices);
 		int[] Indices(int index);
+		float[] VirtualInicies(int[] virtualShape, float[] virtualIndicies);
 
 		//int BlockCopy(object a, object b);
 		void Reshape(int[] newShape);

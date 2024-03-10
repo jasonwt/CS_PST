@@ -45,7 +45,9 @@
                 {
 					for (int j = 0; j < Rank; j++)
                     {
-                        valueIndicies[j] = (i & (1 << j)) != 0 ? FastCeil(index[j]) : FastFloor(index[j]);
+                        valueIndicies[j] = (i & (1 << j)) != 0
+							? FastCeil(index[j]) 
+							: FastFloor(index[j]);
 					}
 
 					values[i] = this[valueIndicies];
@@ -53,11 +55,12 @@
 
 				int weightsIndex = 0;
 
-                for (int numIterations = values.Length / 2; numIterations >= 1; numIterations /= 2, weightsIndex++)
-                {
-                    for (int i = 0; i < numIterations; i++)
-                    {
-                        values[i] = TypeInterpolationMethod(values[i * 2], values[(i * 2) + 1], weights[weightsIndex]);
+				for (int numIterations = values.Length / 2; numIterations >= 1; numIterations /= 2, weightsIndex++) {
+					for (int i = 0; i < numIterations; i++) {
+//						values[i] = TypeInterpolationMethod(values[i * 2], values[(i * 2) + 1], weights[weightsIndex]);
+						values[i] = weights[weightsIndex] == 0.0f
+                            ? values[i * 2]
+                            : TypeInterpolationMethod(values[i * 2], values[(i * 2) + 1], weights[weightsIndex]);
                     }
                 }
 
