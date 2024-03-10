@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RuleSet Name="Rules for Microsoft.DocumentRepositories" ToolsVersion="17.0">
+  <Rules AnalyzerId="AsyncFixer" RuleNamespace="AsyncFixer">
+    <Rule Id="AsyncFixer01" Action="Error" />
+    <Rule Id="AsyncFixer02" Action="Error" />
+    <Rule Id="AsyncFixer03" Action="Error" />
+    <Rule Id="AsyncFixer04" Action="Error" />
+    <Rule Id="AsyncFixer05" Action="Error" />
+  </Rules>
+  <Rules AnalyzerId="Microsoft.VisualStudio.Threading.Analyzers" RuleNamespace="Microsoft.VisualStudio.Threading.Analyzers">
+    <Rule Id="VSTHRD100" Action="Error" />
+    <Rule Id="VSTHRD101" Action="Error" />
+    <Rule Id="VSTHRD106" Action="Error" />
+    <!--
+    This library is intended mainly for use with ASP.NET Core, which does not use ConfigureAwait(false) itself.
+    Callers may protect themselves by using ConfigureAwait(false) themselves, but it is not required.
+    In the rare event of a deadlock introduced by bad caller code, the caller already needs to closely examine their
+    use of synchronization context, and peppering hundreds of ConfigureAwait(false) calls throughout the codebase
+    simply makes that situation harder to debug.
+    -->
+    <Rule Id="VSTHRD111" Action="None" />
+    <Rule Id="VSTHRD200" Action="Error" />
+  </Rules>
+</RuleSet>
